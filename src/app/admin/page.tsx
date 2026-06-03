@@ -13,6 +13,7 @@ export default function AdminDashboard() {
   const [name, setName] = useState("");
   const [baseUnit, setBaseUnit] = useState("g");
   const [basePrice, setBasePrice] = useState("");
+  const [inventoryQty, setInventoryQty] = useState("");
 
   useEffect(() => {
     // Basic auth check (in a real app, use proper middleware)
@@ -48,6 +49,7 @@ export default function AdminDashboard() {
           name,
           base_unit: baseUnit,
           base_price_inr: parseFloat(basePrice),
+          inventory_quantity: inventoryQty ? parseFloat(inventoryQty) : 0,
           description: ""
         })
       });
@@ -55,6 +57,7 @@ export default function AdminDashboard() {
       if (res.ok) {
         setName("");
         setBasePrice("");
+        setInventoryQty("");
         fetchData();
         alert("Product created successfully!");
       } else {
@@ -140,6 +143,10 @@ export default function AdminDashboard() {
             <div>
               <label className="block text-sm font-medium text-gray-700">Base Price (INR per unit)</label>
               <input type="number" step="0.0001" required value={basePrice} onChange={e => setBasePrice(e.target.value)} className="mt-1 w-full border p-2 rounded-md" />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Initial Stock</label>
+              <input type="number" step="any" value={inventoryQty} onChange={e => setInventoryQty(e.target.value)} className="mt-1 w-[120px] border p-2 rounded-md" placeholder="0" />
             </div>
             <button type="submit" className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 h-[42px]">
               Add Product

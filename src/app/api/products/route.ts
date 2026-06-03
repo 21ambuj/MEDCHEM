@@ -16,7 +16,7 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { name, description, base_unit, base_price_inr } = body;
+    const { name, description, base_unit, base_price_inr, inventory_quantity } = body;
 
     const product = await prisma.product.create({
       data: {
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
         description,
         base_unit,
         base_price_inr,
-        inventory_quantity: 0, // Starts at 0, Admin can update later if needed
+        inventory_quantity: inventory_quantity !== undefined ? parseFloat(inventory_quantity) : 0,
       }
     });
 

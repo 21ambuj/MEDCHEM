@@ -210,7 +210,7 @@ export default function AdminDashboard() {
                     <ul className="list-disc pl-4 text-sm">
                       {o.items.map((i: any) => (
                         <li key={i.id}>
-                          {i.product?.name}: {i.ordered_quantity} {i.ordered_unit} <span className="text-gray-500 ml-2">(Stored as {i.base_quantity} base units)</span>
+                          {i.product?.name}: {i.ordered_quantity} {i.ordered_unit} <span className="text-gray-500 ml-2">(Rate: ₹{i.product?.base_price_inr} / {i.product?.base_unit})</span>
                         </li>
                       ))}
                     </ul>

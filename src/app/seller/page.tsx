@@ -99,7 +99,7 @@ export default function SellerDashboard() {
       <div className="max-w-6xl mx-auto space-y-8">
         
         <div className="flex justify-between items-center bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h1 className="text-3xl font-bold text-gray-900">Seller Portal</h1>
+          <h1 className="text-3xl font-bold text-gray-900">Seller / User Portal</h1>
           <button 
             onClick={() => { document.cookie = "role=; Max-Age=0; path=/"; router.push("/login"); }}
             className="text-red-600 hover:text-red-800 font-medium"

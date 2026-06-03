@@ -51,6 +51,7 @@ export default function AdminDashboard() {
           description: ""
         })
       });
+      
       if (res.ok) {
         setName("");
         setBasePrice("");

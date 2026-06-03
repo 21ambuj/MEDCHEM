@@ -40,15 +40,10 @@ export default function LoginPage() {
             onClick={() => loginAs("SELLER")}
             className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition"
           >
-            Login as SELLER
+            Login as SELLER / USER
           </button>
 
-          <button
-            onClick={() => loginAs("USER")}
-            className="w-full flex justify-center py-3 px-4 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 transition"
-          >
-            Login as REGULAR USER
-          </button>
+
         </div>
         
         <div className="mt-6 text-xs text-gray-500 text-center">

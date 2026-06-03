@@ -35,6 +35,29 @@ export async function POST(request: Request) {
   }
 }
 
+export async function PUT(request: Request) {
+  try {
+    const body = await request.json();
+    const { id, inventory_quantity } = body;
+
+    if (!id || inventory_quantity === undefined) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: {
+        inventory_quantity: parseFloat(inventory_quantity)
+      }
+    });
+
+    return NextResponse.json(updatedProduct);
+  } catch (error) {
+    console.error("Failed to update product:", error);
+    return NextResponse.json({ error: "Failed to update product" }, { status: 500 });
+  }
+}
+
 export async function DELETE(request: Request) {
   try {
     const { searchParams } = new URL(request.url);

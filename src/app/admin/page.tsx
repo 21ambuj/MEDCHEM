@@ -78,6 +78,32 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleUpdateStock = async (product: any) => {
+    const newQty = prompt(`Enter new inventory quantity (in ${product.base_unit}) for ${product.name}:`, product.inventory_quantity);
+    if (newQty === null || newQty === "") return;
+    
+    const parsedQty = parseFloat(newQty);
+    if (isNaN(parsedQty)) {
+      alert("Invalid quantity!");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/products", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: product.id, inventory_quantity: parsedQty })
+      });
+      if (res.ok) {
+        fetchData();
+      } else {
+        alert("Failed to update inventory.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading) return <div className="p-8">Loading dashboard...</div>;
 
   return (
@@ -140,7 +166,8 @@ export default function AdminDashboard() {
                   <td className="py-3">{p.base_unit}</td>
                   <td className="py-3">₹{p.base_price_inr}</td>
                   <td className="py-3 font-semibold text-blue-600">{p.inventory_quantity} {p.base_unit}</td>
-                  <td className="py-3">
+                  <td className="py-3 flex gap-3">
+                    <button onClick={() => handleUpdateStock(p)} className="text-blue-500 hover:text-blue-700 text-sm font-medium">Update Stock</button>
                     <button onClick={() => handleDeleteProduct(p.id)} className="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
                   </td>
                 </tr>

@@ -45,6 +45,10 @@ export default function SellerDashboard() {
   };
 
   const handleAddToCart = (product: any, quantity: number, selectedUnit: string) => {
+    if (quantity <= 0) {
+      alert("Quantity must be greater than zero.");
+      return;
+    }
     const factor = getConversionFactor(selectedUnit, product.base_unit);
     const baseQuantity = quantity * factor;
     const price = baseQuantity * parseFloat(product.base_price_inr);

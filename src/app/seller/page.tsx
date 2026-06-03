@@ -62,6 +62,21 @@ export default function SellerDashboard() {
     }]);
   };
 
+  const updateCartItemQuantity = (index: number, newQuantity: number) => {
+    if (newQuantity <= 0) {
+      setCart(cart.filter((_, i) => i !== index));
+      return;
+    }
+    const newCart = [...cart];
+    const item = { ...newCart[index] };
+    const factor = getConversionFactor(item.ordered_unit, item.product.base_unit);
+    item.ordered_quantity = newQuantity;
+    item.base_quantity = newQuantity * factor;
+    item.price_inr = item.base_quantity * parseFloat(item.product.base_price_inr);
+    newCart[index] = item;
+    setCart(newCart);
+  };
+
   const handlePlaceOrder = async () => {
     if (cart.length === 0) return;
     
@@ -152,10 +167,20 @@ export default function SellerDashboard() {
             ) : (
               <div className="space-y-4">
                 {cart.map((item, idx) => (
-                  <div key={idx} className="flex justify-between items-start pb-2 border-b border-gray-100">
+                  <div key={idx} className="flex justify-between items-center pb-3 border-b border-gray-100">
                     <div>
                       <p className="font-medium text-gray-800">{item.product.name}</p>
-                      <p className="text-xs text-gray-500">{item.ordered_quantity} {item.ordered_unit}</p>
+                      <div className="flex items-center gap-3 mt-1">
+                        <button 
+                          onClick={() => updateCartItemQuantity(idx, item.ordered_quantity - 1)}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-bold transition-colors"
+                        >-</button>
+                        <span className="text-sm font-semibold w-12 text-center">{item.ordered_quantity} {item.ordered_unit}</span>
+                        <button 
+                          onClick={() => updateCartItemQuantity(idx, item.ordered_quantity + 1)}
+                          className="bg-gray-200 hover:bg-gray-300 text-gray-700 w-6 h-6 rounded flex items-center justify-center font-bold transition-colors"
+                        >+</button>
+                      </div>
                     </div>
                     <p className="font-bold text-gray-900">₹{item.price_inr.toFixed(2)}</p>
                   </div>

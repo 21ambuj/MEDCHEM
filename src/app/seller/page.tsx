@@ -11,19 +11,25 @@ export default function SellerDashboard() {
 
   // Cart state
   const [cart, setCart] = useState<any[]>([]);
+  // Order history state
+  const [pastOrders, setPastOrders] = useState<any[]>([]);
 
   useEffect(() => {
     if (!document.cookie.includes("role=SELLER") && !document.cookie.includes("role=ADMIN") && !document.cookie.includes("role=USER")) {
       router.push("/login");
       return;
     }
-    fetchProducts();
+    fetchProductsAndOrders();
   }, [router]);
 
-  const fetchProducts = async () => {
+  const fetchProductsAndOrders = async () => {
     try {
-      const res = await fetch("/api/products");
-      if (res.ok) setProducts(await res.json());
+      const [resProducts, resOrders] = await Promise.all([
+        fetch("/api/products"),
+        fetch("/api/orders")
+      ]);
+      if (resProducts.ok) setProducts(await resProducts.json());
+      if (resOrders.ok) setPastOrders(await resOrders.json());
     } catch (err) {
       console.error(err);
     } finally {
@@ -76,7 +82,7 @@ export default function SellerDashboard() {
       if (res.ok) {
         alert("Order placed successfully!");
         setCart([]);
-        fetchProducts(); // Refresh to see updated inventory
+        fetchProductsAndOrders(); // Refresh to see updated inventory and new order
       } else {
         alert("Failed to place order.");
       }
@@ -173,6 +179,39 @@ export default function SellerDashboard() {
           </div>
 
         </div>
+
+        {/* Order History Section */}
+        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 mt-8 text-black">
+          <h2 className="text-xl font-semibold mb-4 text-black">Your Past Orders</h2>
+          
+          {pastOrders.length === 0 ? (
+            <p className="text-gray-500">You have no past orders.</p>
+          ) : (
+            <div className="space-y-4">
+              {pastOrders.map(order => (
+                <div key={order.id} className="border border-gray-200 rounded-md p-4 bg-gray-50">
+                  <div className="flex justify-between items-center border-b border-gray-200 pb-2 mb-2">
+                    <span className="text-sm font-medium text-gray-500">Order ID: {order.id.substring(0, 8)}...</span>
+                    <span className="text-sm text-gray-500">{new Date(order.createdAt).toLocaleString()}</span>
+                  </div>
+                  
+                  <ul className="list-disc pl-5 mb-3 text-sm text-gray-700">
+                    {order.items.map((item: any) => (
+                      <li key={item.id}>
+                        <span className="font-medium">{item.product?.name}</span> - {item.ordered_quantity} {item.ordered_unit} 
+                      </li>
+                    ))}
+                  </ul>
+                  
+                  <div className="flex justify-end items-center pt-2">
+                    <span className="font-bold text-green-600 text-lg">Total Paid: ₹{order.total_price_inr}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        
       </div>
     </div>
   );

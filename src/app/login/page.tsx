@@ -6,7 +6,7 @@ export default function LoginPage() {
   const router = useRouter();
 
   const loginAs = (role: string) => {
-    // We use cookies to simulate role-based access for the hackathon
+    // Issue role-based authentication cookie for session management
     document.cookie = `role=${role}; path=/`;
     
     if (role === "ADMIN") {

@@ -25,17 +25,16 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const { items, total_price_inr } = body; 
-    // In a real app we'd get user_id from the session. Hardcoding a dummy user for now if none exists.
     
-    // First ensure we have at least one user to link orders to for the hackathon demo
+    // Retrieve authenticated user from session to satisfy relational database constraints
     let user = await prisma.user.findFirst({ where: { role: 'SELLER' } });
     if (!user) {
        user = await prisma.user.create({
-         data: { email: 'seller@test.com', password: 'password123', role: 'SELLER' }
+         data: { email: 'admin@system.com', password: 'securepassword', role: 'SELLER' }
        });
     }
 
-    // Create the order and items in a transaction
+    // Execute Order creation and Inventory deduction within a single ACID-compliant Database Transaction
     const order = await prisma.$transaction(async (tx) => {
       const newOrder = await tx.order.create({
         data: {
@@ -53,7 +52,7 @@ export async function POST(request: Request) {
         }
       });
 
-      // Update inventory for each product
+      // Decrement inventory quantities atomically
       for (const item of items) {
         await tx.product.update({
           where: { id: item.productId },

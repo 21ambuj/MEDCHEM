@@ -105,7 +105,7 @@ export default function SellerDashboard() {
       if (res.ok) {
         alert("Order placed successfully!");
         setCart([]);
-        fetchProductsAndOrders(); // Refresh to see updated inventory and new order
+        fetchProductsAndOrders(); // Refresh inventory and order history
       } else {
         alert("Failed to place order.");
       }
@@ -250,11 +250,11 @@ export default function SellerDashboard() {
   );
 }
 
-// A sub-component for the product card to manage its own quantity/unit state
+// ProductCard sub-component encapsulates local quantity and unit state to optimize React rendering
 function ProductCard({ product, onAdd }: { product: any, onAdd: Function }) {
   const [qty, setQty] = useState(1);
   
-  // Default unit based on base unit
+  // Initialize display unit to match database base_unit
   const [unit, setUnit] = useState(product.base_unit);
 
   const factor = unit === product.base_unit ? 1 : 

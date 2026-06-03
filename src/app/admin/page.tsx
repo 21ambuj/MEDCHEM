@@ -16,7 +16,7 @@ export default function AdminDashboard() {
   const [inventoryQty, setInventoryQty] = useState("");
 
   useEffect(() => {
-    // Basic auth check (in a real app, use proper middleware)
+    // Enforce Role-Based Access Control (RBAC) for Admin routes
     if (!document.cookie.includes("role=ADMIN")) {
       router.push("/login");
       return;

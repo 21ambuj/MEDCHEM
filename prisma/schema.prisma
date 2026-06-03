@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  SELLER
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(SELLER)
+  orders    Order[]
+  createdAt DateTime @default(now())
+}
+
+model Product {
+  id                  String      @id @default(uuid())
+  name                String
+  description         String?
+  base_unit           String      // 'g', 'ml', 'item'
+  base_price_inr      Decimal     // Price per 1 base unit
+  inventory_quantity  Decimal     @default(0) // Stored in base unit
+  orderItems          OrderItem[]
+  createdAt           DateTime    @default(now())
+  updatedAt           DateTime    @updatedAt
+}
+
+model Order {
+  id              String      @id @default(uuid())
+  user            User        @relation(fields: [userId], references: [id])
+  userId          String
+  status          String      @default("PENDING")
+  total_price_inr Decimal
+  items           OrderItem[]
+  createdAt       DateTime    @default(now())
+}
+
+model OrderItem {
+  id               String   @id @default(uuid())
+  order            Order    @relation(fields: [orderId], references: [id])
+  orderId          String
+  product          Product  @relation(fields: [productId], references: [id])
+  productId        String
+  ordered_quantity Decimal
+  ordered_unit     String
+  base_quantity    Decimal
+  price_inr        Decimal
+  createdAt        DateTime @default(now())
+}

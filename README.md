@@ -58,6 +58,14 @@ The database uses `Decimal` types for high-precision numeric fields.
     ```
     Navigate to `http://localhost:3000/login`
 
+## How to Deploy to Vercel
+1. Push your code to GitHub.
+2. Go to [Vercel](https://vercel.com/) and click **Add New Project**.
+3. Import your GitHub repository.
+4. Open the **Environment Variables** section and add:
+   * `DATABASE_URL`: `postgresql://[user]:[password]@[host]/[dbname]?sslmode=require`
+5. Click **Deploy**. Vercel will automatically run `npm run build` and `prisma generate`.
+
 ## How to Test
 1.  Go to `/login`.
 2.  Enter any email containing the word "admin" (e.g., `admin@test.com`) to log in to the Admin Dashboard.

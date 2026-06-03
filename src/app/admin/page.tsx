@@ -64,6 +64,20 @@ export default function AdminDashboard() {
     }
   };
 
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+    try {
+      const res = await fetch(`/api/products?id=${id}`, { method: "DELETE" });
+      if (res.ok) {
+        fetchData();
+      } else {
+        alert("Failed to delete product. It might be used in an existing order.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   if (loading) return <div className="p-8">Loading dashboard...</div>;
 
   return (
@@ -116,6 +130,7 @@ export default function AdminDashboard() {
                 <th className="py-2">Base Unit</th>
                 <th className="py-2">Price per Base Unit</th>
                 <th className="py-2">Inventory Qty</th>
+                <th className="py-2">Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -125,10 +140,13 @@ export default function AdminDashboard() {
                   <td className="py-3">{p.base_unit}</td>
                   <td className="py-3">₹{p.base_price_inr}</td>
                   <td className="py-3 font-semibold text-blue-600">{p.inventory_quantity} {p.base_unit}</td>
+                  <td className="py-3">
+                    <button onClick={() => handleDeleteProduct(p.id)} className="text-red-500 hover:text-red-700 text-sm font-medium">Delete</button>
+                  </td>
                 </tr>
               ))}
               {products.length === 0 && (
-                <tr><td colSpan={4} className="py-4 text-center text-gray-500">No products found. Add one above.</td></tr>
+                <tr><td colSpan={5} className="py-4 text-center text-gray-500">No products found. Add one above.</td></tr>
               )}
             </tbody>
           </table>

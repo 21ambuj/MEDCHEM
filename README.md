@@ -1,4 +1,4 @@
-# AasaMedChem - B2B Chemical Inventory & Ordering System
+ # AasaMedChem
 
 # Live Link https://medchem-five.vercel.app/login
 

@@ -39,8 +39,12 @@ export default function SellerDashboard() {
 
   const getConversionFactor = (selectedUnit: string, baseUnit: string) => {
     if (selectedUnit === baseUnit) return 1;
+    // Weight conversions
     if (selectedUnit === "kg" && baseUnit === "g") return 1000;
+    if (selectedUnit === "g" && baseUnit === "kg") return 0.001;
+    // Volume conversions
     if (selectedUnit === "L" && baseUnit === "ml") return 1000;
+    if (selectedUnit === "ml" && baseUnit === "L") return 0.001;
     return 1;
   };
 
@@ -251,14 +255,13 @@ function ProductCard({ product, onAdd }: { product: any, onAdd: Function }) {
   const [qty, setQty] = useState(1);
   
   // Default unit based on base unit
-  const [unit, setUnit] = useState(
-    product.base_unit === 'g' ? 'kg' : 
-    product.base_unit === 'ml' ? 'L' : 'item'
-  );
+  const [unit, setUnit] = useState(product.base_unit);
 
   const factor = unit === product.base_unit ? 1 : 
                  (unit === 'kg' && product.base_unit === 'g') ? 1000 : 
-                 (unit === 'L' && product.base_unit === 'ml') ? 1000 : 1;
+                 (unit === 'g' && product.base_unit === 'kg') ? 0.001 : 
+                 (unit === 'L' && product.base_unit === 'ml') ? 1000 : 
+                 (unit === 'ml' && product.base_unit === 'L') ? 0.001 : 1;
                  
   const calcPrice = qty * factor * parseFloat(product.base_price_inr);
 
@@ -278,9 +281,9 @@ function ProductCard({ product, onAdd }: { product: any, onAdd: Function }) {
           onChange={e => setUnit(e.target.value)} 
           className="w-full border p-2 rounded-md bg-white text-black"
         >
-          {product.base_unit === 'g' && <><option value="kg">kg</option><option value="g">g</option></>}
-          {product.base_unit === 'ml' && <><option value="L">L</option><option value="ml">ml</option></>}
-          {product.base_unit === 'item' && <option value="item">item</option>}
+          {(product.base_unit === 'g' || product.base_unit === 'kg') && <><option value="kg">kg</option><option value="g">g</option></>}
+          {(product.base_unit === 'ml' || product.base_unit === 'L') && <><option value="L">L</option><option value="ml">ml</option></>}
+          {product.base_unit === 'item' && <option value="item">item (unit/count)</option>}
         </select>
       </div>
 

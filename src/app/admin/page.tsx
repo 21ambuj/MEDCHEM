@@ -136,8 +136,10 @@ export default function AdminDashboard() {
               <label className="block text-sm font-medium text-gray-700">Base Unit</label>
               <select value={baseUnit} onChange={e => setBaseUnit(e.target.value)} className="mt-1 w-full border p-2 rounded-md">
                 <option value="g">Grams (g)</option>
+                <option value="kg">Kilograms (kg)</option>
                 <option value="ml">Milliliters (ml)</option>
-                <option value="item">Items (unit)</option>
+                <option value="L">Liters (L)</option>
+                <option value="item">Items (unit/count)</option>
               </select>
             </div>
             <div>

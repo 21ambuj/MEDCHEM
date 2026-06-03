@@ -202,7 +202,7 @@ export default function SellerDashboard() {
                   <ul className="list-disc pl-5 mb-3 text-sm text-gray-700">
                     {order.items.map((item: any) => (
                       <li key={item.id}>
-                        <span className="font-medium">{item.product?.name}</span> - {item.ordered_quantity} {item.ordered_unit} 
+                        <span className="font-medium">{item.product?.name}</span>: {item.ordered_quantity} {item.ordered_unit} 
                       </li>
                     ))}
                   </ul>

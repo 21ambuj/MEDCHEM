@@ -23,9 +23,6 @@ export default function LoginPage() {
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             AasaMedChem Login
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600 mb-8">
-            Select an account below to test the Role-Based Access Control (RBAC).
-          </p>
         </div>
         
         <div className="space-y-4">
@@ -44,11 +41,6 @@ export default function LoginPage() {
           </button>
 
 
-        </div>
-        
-        <div className="mt-6 text-xs text-gray-500 text-center">
-          <p>Admin has access to inventory and pricing.</p>
-          <p>Sellers & Users can browse and place orders.</p>
         </div>
       </div>
     </div>
